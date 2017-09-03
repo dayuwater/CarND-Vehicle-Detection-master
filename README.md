@@ -4,8 +4,6 @@
 Note 
 ---
 
-`writeup_template.md` is actually the writeup you are looking for. **NOT** the template as the name shows.
-
 You may also find a file named `Writeup.ipynb`. **That is NOT the writeup**. I used Jupyter Notebook as a local markdown editor because my Github did not work for some time when I work on the project.
 
 
