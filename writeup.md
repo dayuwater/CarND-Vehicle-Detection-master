@@ -33,6 +33,14 @@ The goals / steps of this project are the following:
 
 [image13]: ./output_images/false_two_detections.png
 [image14]: ./output_images/false_caused_by_shade.png
+
+[image15]: ./output_images/96_test1.jpg
+[image16]: ./output_images/96_test2.jpg
+[image17]: ./output_images/96_test3.jpg
+[image18]: ./output_images/96_test4.jpg
+[image19]: ./output_images/96_test5.jpg
+[image20]: ./output_images/96_test6.jpg
+
 [video1]: ./output_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
@@ -111,6 +119,16 @@ In order to improve the performance of my classifier, I implemented the sliding 
 
 
 ![alt text][image8]
+
+Here are some test images:
+
+![alt text][image15]
+![alt text][image16]
+![alt text][image17]
+![alt text][image18]
+![alt text][image19]
+![alt text][image20]
+
 
 ---
 
