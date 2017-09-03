@@ -107,7 +107,7 @@ The code is in the block under "Step 6: One-functionize" in `project.ipynb`. (Li
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-In order to improve the performance of my classifier, I implemented the sliding windows only to the region that cars are most likely to appear, like from 400 to 500 in y-axis. Because in test images and videos, the car position is at the lest-most lane all the times. I also eliminated the left half of the image for searching area. Please see the last section of the writeup to see a more detailed discussion about this approach.
+In order to improve the performance of my classifier, I implemented the sliding windows only to the region that cars are most likely to appear, like from 400 to 500 in y-axis. Because in test images and videos, the car position is at the left-most lane all the times. I also eliminated the left half of the image for searching area. Please see the last section of the writeup to see a more detailed discussion about this approach.
 
 
 ![alt text][image8]
