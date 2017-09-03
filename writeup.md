@@ -24,14 +24,16 @@ The goals / steps of this project are the following:
 
 [image6]: ./output_images/color_features.png
 
-[image7]: ./examples/HOG_example.jpg
-[image8]: ./examples/sliding_windows.jpg
-[image9]: ./examples/sliding_window.jpg
-[image10]: ./examples/bboxes_and_heat.png
+[image7]: ./output_images/all_sliding_windows.png
+[image8]: ./output_images/detected_sliding_windows.png
+[image9]: ./output_images/single_1.png
+[image10]: ./output_images/single_2.png
+[image11]: ./output_images/cumulative_1.png
+[image12]: ./output_images/cumulative_2.png
 
-[image9]: ./examples/labels_map.png
-[image9]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
+[image13]: ./output_images/false_two_detections.png
+[image14]: ./output_images/false_caused_by_shade.png
+[video1]: ./output_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -98,22 +100,22 @@ I then passed the scaled feature vectors and labels into a Linear SVC. The test 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
 I used sliding window search in 2 scales. One is 64 * 64 window with an overlap of 0.7, the other one is 80 * 80 window with an overlap of 0.8. The smaller window is more effective in detecting farther cars, and the larger window is more effective in detecting closer cars. As you can see in the following images, the size of the bounding box fits the appeared size of the car, and this is how I decided the size of the sliding window. However, for the amount of overlapping, I just experimented with different value and I found the value stated above works best.
+
 ![alt text][image7]
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-In order to improve the performance of my classifier, I implemented the sliding windows only to the region that cars are most likely to appear, like from 400 to 500 in y-axis. Because in test images and videos, the car position is at the lest-most lane all the times. I also eliminated the left half of the image for searching area.
+In order to improve the performance of my classifier, I implemented the sliding windows only to the region that cars are most likely to appear, like from 400 to 500 in y-axis. Because in test images and videos, the car position is at the lest-most lane all the times. I also eliminated the left half of the image for searching area. Please see the last section of the writeup to see a more detailed discussion about this approach.
 
 
 ![alt text][image8]
-![alt text][image9]
-![alt text][image10]
+
 ---
 
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./output_video.mp4)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
@@ -140,17 +142,19 @@ class BoundingBoxes:
 
 Here's an example result showing the heatmap from a series of frames of video and the bounding boxes then overlaid on the last frame of video:
 
-### Here are six frames and their corresponding heatmaps with a threshold of 1:
+### Here are six frames and their corresponding heatmaps:
 
-![alt text][image5]
-
-### Here are six frames and their cumulative heatmaps:
-
-![alt text][image5]
+![alt text][image9]
+![alt text][image10]
 
 
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
+### Here are six frames and their cumulative heatmaps with a cumulative threshold of 6:
+
+![alt text][image11]
+![alt text][image12]
+
+
+
 
 
 
@@ -165,7 +169,7 @@ Here's an example result showing the heatmap from a series of frames of video an
 - When the car is at the right most position, the pipeline either does not work, or work in a strange way. See the following image: The pipeline considers this as two cars because it detects a back view and a rear view separately.
 - Although I only used Y channel for HOG features, and this 5x the speed of the pipeline compared to use all YCrCb, but 2.5 frames per second is not ideal for speed. This is far from real time detection.
 
-![alt text][image8]
+![alt text][image13]
 
 - It cannot detect cars that are in a farther distance ( perhaps 100m away ). Perhaps a more sophisticated sliding window approach is required.
 
@@ -174,12 +178,12 @@ In order to further check the robustness of the pipeline, I used the two challen
 - Although it can detect cars that are about 80m - 100m away, the size of the bounding box is not correct.
 - It will picks up shades as cars. Especially the shades caused by bridges.
 
-![alt text][image9]
+![alt text][image14]
 
 - It does not pick up motorcycles. This could be solved by adding more training data for motorcycles and other types of vehicles, perhaps pedestrains as well.
-- It does not work well on picking up cars driving in opposite direction using the same parameters for detecting cars driving in same direction. Note: Please tune this parameter when grading my code: This is in the last block of my Jupyter Notebook
+- It does not work well on picking up cars driving in opposite direction using the same parameters for detecting cars driving in same direction. Althogh extra parameter tuning will work in some sense,( Note: Please tune this parameter when grading my code: This is in the last block of my Jupyter Notebook.) it does increases false positives. However, tuning this manually is not an ideal solution. It is better to detect those lanes and use different size of storages and thresholds for different driving directions.
 ```python
-bb = BoundingBoxes(10) # use 10 for detecting opposite lane, 30 for lanes driving in the same direction
+bb = BoundingBoxes(30) # use 10 for detecting opposite lane, 30 for lanes driving in the same direction
 ```
 
 
