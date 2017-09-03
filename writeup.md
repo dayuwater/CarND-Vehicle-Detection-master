@@ -43,6 +43,8 @@ The goals / steps of this project are the following:
 
 You're reading it!
 
+All of my code are in `lesson_functions.py` and `project.ipynb`. The first file is used to store some helper functions so that it does not take up space on the Notebook, and most of that file are code from lesson 34. `project.ipynb` is my Jupyter Notebook for experiments, all of the outputs are produced from this file.
+
 ### Histogram of Oriented Gradients (HOG)
 
 #### 2. Explain how (and identify where in your code) you extracted HOG features from the training images. Explain how you settled on your final choice of HOG parameters.
@@ -118,14 +120,34 @@ Here's a [link to my video result](./project_video.mp4)
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
+I then store all the bounding boxes detected in one frame to a class here: This is two blocks before "Step 6: Apply head map on time domain ( consecutive frames )" in my `project.ipynb`
+```python
+class BoundingBoxes:
+    def __init__(self, max_frame = 6):
+        self.bboxes = []  # a list of recently discovered bounding boxes. This should be 2D
+        self.max_frame = max_frame # maximum frames of bboxes to store
+        
+    def add_bboxes(self, bboxes):
+        # if there are less than the maximum frames stored, add in
+        if len(self.bboxes) < self.max_frame:
+            self.bboxes.append(bboxes)
+        # else, pop the first one
+        else:
+            self.bboxes.pop(0)
+            self.bboxes.append(bboxes)
+ ```
+ This makes sure that I can use heatmap to threshold out those false detections that only occurs in some frames recently. In addition, this smooth out the variances of box positions in consecutive frames.
 
-### Here are six frames and their corresponding heatmaps:
+Here's an example result showing the heatmap from a series of frames of video and the bounding boxes then overlaid on the last frame of video:
+
+### Here are six frames and their corresponding heatmaps with a threshold of 1:
 
 ![alt text][image5]
 
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
+### Here are six frames and their cumulative heatmaps:
+
+![alt text][image5]
+
 
 ### Here the resulting bounding boxes are drawn onto the last frame in the series:
 ![alt text][image7]
@@ -134,9 +156,32 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+- Although I used thresholding in both spacial and time domain, and this does reduces a lot of false positives. There are still some false positives. However, this must be dealt in another way because increasing the threshold value might be a overkill and introduces false negatives.
+- Because for all of the test images and test videos provided for this project, the car is at the left most lane, which means it is completely unnessesary to detect vehicles to the left. I actually used this fact and eliminated all the left portion of the input image, and this does proves to be successful in eliminating false positives. However, if the car is not at the left most lane, this pipeline will fail to detect cars on the left. This does not mean hard thresholding in x-axis (left-right) is wrong. If we can combine this project with advanced lane finding project, and use the detected lane as the threshold point, this pipeline will work even if the car is not at the left most lane.
+- When the car is at the right most position, the pipeline either does not work, or work in a strange way. See the following image: The pipeline considers this as two cars because it detects a back view and a rear view separately.
+- Although I only used Y channel for HOG features, and this 5x the speed of the pipeline compared to use all YCrCb, but 2.5 frames per second is not ideal for speed. This is far from real time detection.
+
+![alt text][image8]
+
+- It cannot detect cars that are in a farther distance ( perhaps 100m away ). Perhaps a more sophisticated sliding window approach is required.
+
+In order to further check the robustness of the pipeline, I used the two challenge videos from Advanced Lane detection project as well. I also found the following problems arise from those two videos:
+ 
+- Although it can detect cars that are about 80m - 100m away, the size of the bounding box is not correct.
+- It will picks up shades as cars. Especially the shades caused by bridges.
+
+![alt text][image9]
+
+- It does not pick up motorcycles. This could be solved by adding more training data for motorcycles and other types of vehicles, perhaps pedestrains as well.
+- It does not work well on picking up cars driving in opposite direction using the same parameters for detecting cars driving in same direction. Note: Please tune this parameter when grading my code: This is in the last block of my Jupyter Notebook
+```python
+bb = BoundingBoxes(10) # use 10 for detecting opposite lane, 30 for lanes driving in the same direction
+```
+
+
+
 
