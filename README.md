@@ -6,6 +6,8 @@ Note
 
 `writeup_template.md` is actually the writeup you are looking for. **NOT** the template as the name shows.
 
+You may also find a file named `Writeup.ipynb`. **That is NOT the writeup**. I used Jupyter Notebook as a local markdown editor because my Github did not work for some time when I work on the project.
+
 
 In this project, your goal is to write a software pipeline to detect vehicles in a video (start with the test_video.mp4 and later implement on full project_video.mp4), but the main output or product we want you to create is a detailed writeup of the project.  Check out the [writeup template](https://github.com/udacity/CarND-Vehicle-Detection/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup.  
 
