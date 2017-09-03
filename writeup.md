@@ -101,7 +101,7 @@ I then passed the scaled feature vectors and labels into a Linear SVC. The test 
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I used sliding window search in 2 scales. One is 64 * 64 window with an overlap of 0.7, the other one is 80 * 80 window with an overlap of 0.8. The smaller window is more effective in detecting farther cars, and the larger window is more effective in detecting closer cars. As you can see in the following images, the size of the bounding box fits the appeared size of the car, and this is how I decided the size of the sliding window. However, for the amount of overlapping, I just experimented with different value and I found the value stated above works best.
+The code is in the block under "Step 6: One-functionize" in `project.ipynb`. (Line 17 - 30) The sliding_window search implementation is in `lesson_functions.py` (Line 213 - 241). This is the code copied from lesson 34, it extracts the required features from a given section of an image, and use the classifier to predict whether the feature is a car or not. I used sliding window search in 2 scales. One is 64 * 64 window with an overlap of 0.7, the other one is 80 * 80 window with an overlap of 0.8. The smaller window is more effective in detecting farther cars, and the larger window is more effective in detecting closer cars. As you can see in the following images, the size of the bounding box fits the appeared size of the car, and this is how I decided the size of the sliding window. However, for the amount of overlapping, I just experimented with different value and I found the value stated above works best.
 
 ![alt text][image7]
 
