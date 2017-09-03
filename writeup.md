@@ -47,6 +47,8 @@ You're reading it!
 
 All of my code are in `lesson_functions.py` and `project.ipynb`. The first file is used to store some helper functions so that it does not take up space on the Notebook, and most of that file are code from lesson 34. `project.ipynb` is my Jupyter Notebook for experiments, all of the outputs are produced from this file.
 
+`output_video.mp4` is the video you are looking for.
+
 ### Histogram of Oriented Gradients (HOG)
 
 #### 2. Explain how (and identify where in your code) you extracted HOG features from the training images. Explain how you settled on your final choice of HOG parameters.
